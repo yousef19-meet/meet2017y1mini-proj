@@ -62,6 +62,10 @@ LEFT=1
 DOWN=2
 RIGHT=3
 
+# food image setup + object
+turtle.register_shape("trash.gif") #Add trash picture
+food = turtle.clone()
+food.shape("trash.gif")
 
 
 
@@ -121,9 +125,13 @@ def make_food():
     food_y = random.randint(min_y,max_y)*SQUARE_SIZE
     ##1.WRITE YOUR CODE HERE: Make the food turtle go to the randomly-generated
     ## position
+    food.goto(food_x,food_y)
     ##2.WRITE YOUR CODE HERE: Add the food turtle's position to the food positions list
-
+    newest_food_pos=(food_x,food_y)
+    food_pos.append(newest_food_pos)
     ##3.WRITE YOUR CODE HERE: Add the food turtle's stamp to the food stamps list
+    food_ID=food.stamp()
+    food_stamps.append(food_ID)
 
 
 ########################################################################################################################
@@ -175,6 +183,7 @@ def move_snake():
         food_pos.pop(food_ind) #Remove eaten food position
         food_stamps.pop(food_ind) #Remove eaten food stamp
         print('You have eaten the food!')
+        make_food()
         #HINT: This if statement may be useful for Part 8
         ...
         #Don't change the rest of the code in move_snake() function:
@@ -188,6 +197,7 @@ def move_snake():
     old_stamp = stamp_list.pop(0)
     snake.clearstamp(old_stamp)
     pos_list.pop(0)
+    
 
 
 ##GAME OVER
@@ -210,24 +220,21 @@ def move_snake():
         quit()
     turtle.ontimer(move_snake,TIME_STEP)
 ##GAME OVER(END)
+make_food()
 move_snake()
 
 ##FOOD
 
-turtle.register_shape("trash.gif") #Add trash picture
 
-
-food = turtle.clone()
-food.shape("trash.gif")
-#Locations of food
-food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
-food_stamps = []
-
-
-for this_food_pos in food_pos :
-    food.goto(this_food_pos)
-    food_ID = food.stamp()
-    food_stamps.append(food_ID)
+###Locations of food
+##food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
+##food_stamps = []
+##
+##
+##for this_food_pos in food_pos :
+##    food.goto(this_food_pos)
+##    food_ID = food.stamp()
+##    food_stamps.append(food_ID)
 
 
 ##FOOD (END)
@@ -236,3 +243,9 @@ for this_food_pos in food_pos :
 
 
 turtle.mainloop()
+
+
+
+
+
+#list_name[:-1]
