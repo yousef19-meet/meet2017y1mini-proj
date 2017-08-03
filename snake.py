@@ -1,15 +1,36 @@
 import turtle
 import random
 
-turtle.tracer(1,0)
+"""
+1. If the snake is moving left, and you press right, it gets treated
+as a self-collision, and with other directions. Fix it
+2. Make a counter for how many foods you ate AND display it on the
+turtle screen
+3. Make a visible border, and make SURE that the food created is inside
+the border. Remember to change the boundaries so that if you go outside the border
+then the game will exit
+Yalla good luck
+"""
 
+border=turtle.clone()
+
+turtle.tracer(1,0)
 SIZE_X=800
-SIZE_Y=500
+SIZE_Y=900
+border.hideturtle()
+border.penup()
+border.goto(-350,-200)
+border.pendown()
+border.goto(-350,200)
+border.goto(350,200)
+border.goto(350,-200)
+border.goto(-350,-200)
+
 turtle.setup(SIZE_X,SIZE_Y)
 
 turtle.penup()
 SQUARE_SIZE=20
-START_LENGTH=8
+START_LENGTH=2
 pos_list=[]
 stamp_list=[]
 food_pos=[]
@@ -109,7 +130,14 @@ turtle.onkeypress(down, DOWN_ARROW)
 turtle.onkeypress(left, LEFT_ARROW)
 turtle.onkeypress(up, UP_ARROW)
 turtle.listen()
-
+score=turtle.clone()
+score.penup()
+score.goto(100,100)
+score1=0
+########################################################################################################################
+def write(score1):
+    score.clear()
+    score.write(str(score1))
 ########################################################################################################################
 
 def make_food():
@@ -138,7 +166,7 @@ def make_food():
 
 
 def move_snake():
-    global direction
+    global direction ,score1
     my_pos = snake.pos()
     x_pos = my_pos[0]
     y_pos = my_pos[1]
@@ -166,7 +194,8 @@ def move_snake():
     else:
         snake.goto(x_pos , y_pos- SQUARE_SIZE)
         print("You moved down!")
-        
+
+    # make head
     my_pos=snake.pos()
     pos_list.append(my_pos)
     new_stamp = snake.stamp()
@@ -175,6 +204,7 @@ def move_snake():
     ######## SPECIAL PLACE - Remember it for Part 5
     global food_stamps, food_pos
     #If snake is on top of food item
+    
     if snake.pos() in food_pos:
         food_ind=food_pos.index(snake.pos()) #What does this do?
         food.clearstamp(food_stamps[food_ind]) #Remove eaten food
@@ -183,6 +213,8 @@ def move_snake():
         food_pos.pop(food_ind) #Remove eaten food position
         food_stamps.pop(food_ind) #Remove eaten food stamp
         print('You have eaten the food!')
+        score1=score1+1
+        write(score1)
         make_food()
         #HINT: This if statement may be useful for Part 8
         ...
@@ -194,10 +226,16 @@ def move_snake():
 
         #pop zeroth element in pos_list to get rid of last the last
         #piece of the tail
-    old_stamp = stamp_list.pop(0)
-    snake.clearstamp(old_stamp)
-    pos_list.pop(0)
+    else:
+        # deletes the tail        
+        old_stamp = stamp_list.pop(0)
+        snake.clearstamp(old_stamp)
+        pos_list.pop(0)
     
+    if my_pos in pos_list[:-1]:
+        print("you ate yourself!!")
+        quit()
+        
 
 
 ##GAME OVER
